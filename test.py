@@ -21,11 +21,13 @@ def getTestCases():
     return r.json()
 
 if __name__ == '__main__':
+    print("Autograder for CS154 Lab 3 - Version 0.0.2")
+    print("Fetching tests from server...")
     tests = getTestCases()
     if(tests['code']!=200):
         print("Server failed to make tests:\n", tests['message'])
         sys.exit(1)
-
+    print("Running tests...")
     binary = tests['binary'].split('\n')
     expected = tests['composed']['expected']
     tests = tests['composed']['tests']
