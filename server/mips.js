@@ -247,17 +247,19 @@ function gtBEQ(num) {
         instructions.push("addi $t1, $zero, " + inp1)
         instructions.push("addi $t2, $zero, " + inp2)
         instructions.push("slt $t3, $t1, $t2")
-        instructions.push("beq $t3, $zero, BEQ_TEST_END_" + i)
+        instructions.push("beq $t3, $zero, BEQ_TEST_ELSE_" + i)
         instructions.push("BEQ_TEST" + i + ":")
-        instructions.push("addi $t3, $zero, 0")
+        instructions.push("addi $t3, $zero, 222")
+        instructions.push("sw $t3, 0($k0)")
+        instructions.push("addi $k0, $k0, 1")
+        instructions.push("beq $zero, $zero, BEQ_TEST_END_" + i)
+        instructions.push("BEQ_TEST_ELSE_" + i + ":")
+        instructions.push("addi $t3, $zero, 111")
         instructions.push("sw $t3, 0($k0)")
         instructions.push("addi $k0, $k0, 1")
         instructions.push("BEQ_TEST_END_" + i + ":")
-        instructions.push("addi $t3, $zero, 1")
-        instructions.push("sw $t3, 0($k0)")
-        instructions.push("addi $k0, $k0, 1")
-        tests.push(`beq ${inp1}, ${inp2}`)
-        t1 = inp2
+        tests.push(`beq ${inp1} < ${inp2}`)
+        t1 = inp1 < inp2 ? 222 : 111
         exp_res.push(t1)
     }
     return {
@@ -276,7 +278,8 @@ const functionMap = {
     "lui": gtLUI,
     "ori": gtORI,
     "slt": gtSLT,
-    "lw": gtLW
+    "lw": gtLW,
+    "beq": gtBEQ
 }
 
 module.exports = {
