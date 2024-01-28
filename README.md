@@ -26,6 +26,8 @@ Requirement:
   - `ori`
   - `lui`
   - `slt`
+  - `lw`
+  - `beq`
 - Run `python3 test.py`
 
 ## Update:
