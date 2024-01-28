@@ -13,6 +13,7 @@ myTestCases = {
     "lui": 10,
     "ori": 10,
     "slt": 10,
+    "lw": 10,
 }
 
 def getTestCases():
@@ -64,5 +65,5 @@ if __name__ == '__main__':
             failed = True
             
     if(not failed):
-        print("All tests passed!")
+        print(f"All tests ({len(tests)} tests) passed!")
     

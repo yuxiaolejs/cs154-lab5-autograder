@@ -206,13 +206,42 @@ function gtSLT(num) {
     }
 }
 
+function gtLW(num){
+    let instructions = []
+    let exp_res = []
+
+    let tests = []
+
+    let t1 = 0
+    for (let i = 0; i < num; i++) {
+        let inp1 = parseInt(Math.random() * 100 + 100)
+        let inp2 = parseInt(Math.random() * 100)
+        instructions.push("addi $t1, $zero, " + inp1)
+        instructions.push("addi $t2, $zero, " + inp2)
+        instructions.push("sw $t2, 0($t1)")
+        instructions.push("lw $t3, 0($t1)")
+        instructions.push("sw $t3, 0($k0)")
+        instructions.push("addi $k0, $k0, 1")
+        tests.push(`lw ${inp1}, ${inp2}`)
+        t1 = inp2
+        exp_res.push(t1)
+    }
+    return {
+        tests: tests,
+        inst: instructions.join("\n"),
+        exp: exp_res
+    }
+
+}
+
 const functionMap = {
     "addi": gtADDI,
     "add": gtADD,
     "and": gtAND,
     "lui": gtLUI,
     "ori": gtORI,
-    "slt": gtSLT
+    "slt": gtSLT,
+    "lw": gtLW
 }
 
 module.exports = {
