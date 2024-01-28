@@ -1,4 +1,4 @@
-# CS 154 Lab03 autograder v0.0.2
+# CS 154 Lab03 autograder v0.0.3
 Yes, it is an autograder for CS154, lab3
 
 Requirement:
@@ -32,8 +32,8 @@ Requirement:
 - 01/27/2024: Use server to compile test cases. No `spim` or `nodejs` required.
 
 ## TODO:
-- [ ] Add BEQ
-- [ ] Add LW
+- [X] Add BEQ
+- [X] Add LW
 
 ## Server deployment instruction:
 **Note:** you don't need to read this part if you just want to use the script.

@@ -206,7 +206,7 @@ function gtSLT(num) {
     }
 }
 
-function gtLW(num){
+function gtLW(num) {
     let instructions = []
     let exp_res = []
 
@@ -231,6 +231,41 @@ function gtLW(num){
         inst: instructions.join("\n"),
         exp: exp_res
     }
+
+}
+
+function gtBEQ(num) {
+    let instructions = []
+    let exp_res = []
+
+    let tests = []
+
+    let t1 = 0
+    for (let i = 0; i < num; i++) {
+        let inp1 = parseInt(Math.random() * 100)
+        let inp2 = parseInt(Math.random() * 100)
+        instructions.push("addi $t1, $zero, " + inp1)
+        instructions.push("addi $t2, $zero, " + inp2)
+        instructions.push("slt $t3, $t1, $t2")
+        instructions.push("beq $t3, $zero, BEQ_TEST_END_" + i)
+        instructions.push("BEQ_TEST" + i + ":")
+        instructions.push("addi $t3, $zero, 0")
+        instructions.push("sw $t3, 0($k0)")
+        instructions.push("addi $k0, $k0, 1")
+        instructions.push("BEQ_TEST_END_" + i + ":")
+        instructions.push("addi $t3, $zero, 1")
+        instructions.push("sw $t3, 0($k0)")
+        instructions.push("addi $k0, $k0, 1")
+        tests.push(`beq ${inp1}, ${inp2}`)
+        t1 = inp2
+        exp_res.push(t1)
+    }
+    return {
+        tests: tests,
+        inst: instructions.join("\n"),
+        exp: exp_res
+    }
+
 
 }
 

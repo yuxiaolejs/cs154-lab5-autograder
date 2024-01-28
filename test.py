@@ -14,6 +14,7 @@ myTestCases = {
     "ori": 10,
     "slt": 10,
     "lw": 10,
+    "beq": 10,
 }
 
 def getTestCases():
@@ -22,7 +23,7 @@ def getTestCases():
     return r.json()
 
 if __name__ == '__main__':
-    print("Autograder for CS154 Lab 3 - Version 0.0.2")
+    print("Autograder for CS154 Lab 3 - Version 0.0.3")
     print("Fetching tests from server...")
     tests = getTestCases()
     if(tests['code']!=200):
