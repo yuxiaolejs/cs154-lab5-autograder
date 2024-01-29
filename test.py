@@ -2,7 +2,9 @@ import ucsbcs154lab3_cpu
 import pyrtl
 import sys
 import json
-import requests
+# import requests
+from urllib import request, parse
+
 
 ucsbcs154lab3_cpu.d_mem
 
@@ -19,8 +21,10 @@ myTestCases = {
 
 def getTestCases():
     url = 'https://cs154-lab3.proxied.tianleyu.com/testcase'
-    r = requests.post(url, json=myTestCases)
-    return r.json()
+    data = json.dumps(myTestCases).encode()
+    req = request.Request(url, data=data, headers={'content-type': 'application/json'})
+    response = request.urlopen(req)
+    return json.loads(response.read())
 
 if __name__ == '__main__':
     print("Autograder for CS154 Lab 3 - Version 0.0.3")

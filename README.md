@@ -37,6 +37,9 @@ Requirement:
 - [X] Add BEQ
 - [X] Add LW
 
+## Special thanks to:
+- @r0ckwav3 - suggested to remove requests package to avoid missing dependency
+
 ## Server deployment instruction:
 **Note:** you don't need to read this part if you just want to use the script.
 
