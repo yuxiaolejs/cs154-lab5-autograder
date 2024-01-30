@@ -1,6 +1,7 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
-const mips = require("./mips")
+const mipsmem = require("./mips")
+const mipsrf = require("./mipsrf")
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -10,6 +11,34 @@ app.get('/', (req, res) => {
 })
 
 app.post('/testcase', (req, res) => {
+    let mips = mipsmem
+    let testSuit = []
+    let keys = Object.keys(req.body)
+    for (let i = 0; i < keys.length; i++) {
+        let key = keys[i]
+        let value = req.body[key]
+        if (value && mips.functionMap[key] && typeof mips.functionMap[key] === "function" && typeof value === "number") {
+            testSuit.push(mips.functionMap[key](value))
+        }
+    }
+    let composed = mips.compose(testSuit)
+    mips.compile(composed.source).then((binary) => {
+        res.json({
+            code: 200,
+            binary: binary,
+            composed: composed
+        })
+    }).catch((e) => {
+        console.log(e)
+        res.json({
+            code: 500,
+            message: e.message
+        })
+    })
+})
+
+app.post('/rf/testcase', (req, res) => {
+    let mips = mipsrf
     let testSuit = []
     let keys = Object.keys(req.body)
     for (let i = 0; i < keys.length; i++) {
