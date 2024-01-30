@@ -32,6 +32,7 @@ Requirement:
 
 ## Update:
 - 01/27/2024: Use server to compile test cases. No `spim` or `nodejs` required.
+- 01/30/2024: Add negative numbers to test cases
 
 ## TODO:
 - [X] Add BEQ
