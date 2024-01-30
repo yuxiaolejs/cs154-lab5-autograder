@@ -19,6 +19,35 @@ myTestCases = {
     "beq": 10,
 }
 
+regs = {
+    "zero": 0,
+    "at": 1,
+    "v0": 2,
+    "v1": 3,
+    "a0": 4,
+    "a1": 5,
+    "a2": 6,
+    "a3": 7,
+    "t0": 8,
+    "t1": 9,
+    "t2": 10,
+    "t3": 11,
+    "t4": 12,
+    "t5": 13,
+    "t6": 14,
+    "t7": 15,
+    "s0": 16,
+    "s1": 17,
+    "s2": 18,
+    "s3": 19,
+    "s4": 20,
+    "s5": 21,
+    "s6": 22,
+    "s7": 23,
+    "t8": 24,
+    "t9": 25
+}
+
 def getTestCases():
     url = 'https://cs154-lab3.proxied.tianleyu.com/testcase'
     data = json.dumps(myTestCases).encode()
@@ -27,17 +56,20 @@ def getTestCases():
     return json.loads(response.read())
 
 if __name__ == '__main__':
-    print("Autograder for CS154 Lab 3 - Version 0.0.3")
+    print("Autograder for CS154 Lab 3 - Version 0.0.4")
     print("Fetching tests from server...")
     tests = getTestCases()
     if(tests['code']!=200):
         print("Server failed to make tests:\n", tests['message'])
         sys.exit(1)
     print("Running tests...")
+    
+    # print(tests['composed']['source'])
+    
     binary = tests['binary'].split('\n')
     expected = tests['composed']['expected']
     tests = tests['composed']['tests']
-    # print(expected)
+    
     
     sim_trace = pyrtl.SimulationTrace()
     i_mem_init = {}
@@ -63,8 +95,11 @@ if __name__ == '__main__':
             print("   Command was:", tests[i])
             print("")
             failed = True
-        if(val != dmem_info[i]):
-            print("Test failed: expected", val, "got", dmem_info[i])
+        let_val = dmem_info[i]
+        if(let_val > 2**31):
+            let_val = -(let_val^0xffffffff) - 1
+        if(val != let_val):
+            print("Test failed: expected", val, "got", let_val)
             print("   Command was:", tests[i])
             print("")
             failed = True
