@@ -4,12 +4,13 @@ const child_process = require("child_process")
 let regs = ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"]
 
 function compose(test_suites) {
+    console.log(test_suites)
     let outputSource = "main:\n"
     let expectedDRamVal = []
 
     let tests = []
 
-    let reg
+    let reg = []
 
     for (let i = 0; i < test_suites.length; i++) {
         let test = test_suites[i]

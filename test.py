@@ -52,8 +52,8 @@ regs = {
     "t9": 25
 }
 
-def getTestCases(testcases):
-    url = 'https://cs154-lab3.proxied.tianleyu.com/testcase'
+def getTestCases(path, testcases):
+    url = 'https://cs154-lab3.proxied.tianleyu.com'+path
     data = json.dumps(testcases).encode()
     req = request.Request(url, data=data, headers={'content-type': 'application/json'})
     response = request.urlopen(req)
@@ -61,7 +61,7 @@ def getTestCases(testcases):
 
 def memTest():
     print("Memory test - Fetching tests from server...")
-    tests = getTestCases(memTestCases)
+    tests = getTestCases("/testcase",memTestCases)
     if(tests['code']!=200):
         print("Server failed to make tests:\n", tests['message'])
         sys.exit(1)
@@ -112,7 +112,7 @@ def memTest():
         
 def regTest():
     print("Regfile test - Fetching tests from server...")
-    tests = getTestCases(regTestCases)
+    tests = getTestCases("/rf/testcase",regTestCases)
     if(tests['code']!=200):
         print("Server failed to make tests:\n", tests['message'])
         sys.exit(1)
@@ -143,6 +143,9 @@ def regTest():
     
     failed = False
     
+    print("Expected:", expected)
+    print("Got:", dmem_info)
+    
     for i, val in enumerate(expected):
         if(i not in dmem_info):
             print("Test failed: expected", val, "got nothing")
@@ -163,5 +166,5 @@ def regTest():
 
 if __name__ == '__main__':
     print("Autograder for CS154 Lab 3 - Version 0.0.4")
-    memTest()
+    # memTest()
     regTest()
