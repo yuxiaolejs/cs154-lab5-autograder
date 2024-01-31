@@ -20,7 +20,8 @@ memTestCases = {
 }
 
 regTestCases = {
-    "addi": 10
+    "addi": 100,
+    "add": 100,
 }
 
 regs = {
@@ -122,8 +123,11 @@ def regTest():
     
     binary = tests['binary'].split('\n')
     expected = tests['composed']['expected']
+    insts = tests['composed']['inst']
+    reg = tests['composed']['reg']
     tests = tests['composed']['tests']
     
+    # print(binary)
     
     sim_trace = pyrtl.SimulationTrace()
     i_mem_init = {}
@@ -132,31 +136,21 @@ def regTest():
         if(line != ''):
             i_mem_init[i] = int(line, 16)
             i += 1
-
     sim = pyrtl.Simulation(tracer=sim_trace, memory_value_map={
         ucsbcs154lab3_cpu.i_mem: i_mem_init
     })
-    for cycle in range(1000):
-        sim.step({})
-    dmem_info = sim.inspect_mem(ucsbcs154lab3_cpu.d_mem)
-    # print(dmem_info)
     
     failed = False
-    
-    print("Expected:", expected)
-    print("Got:", dmem_info)
-    
     for i, val in enumerate(expected):
-        if(i not in dmem_info):
-            print("Test failed: expected", val, "got nothing")
-            print("   Command was:", tests[i])
-            print("")
-            failed = True
-        let_val = dmem_info[i]
+        for cycle in range(insts[i]):
+            sim.step({})
+        rf_info = sim.inspect_mem(ucsbcs154lab3_cpu.rf)
+        # print(regs[reg[i]],expected[i],rf_info[regs[reg[i]]])
+        let_val = rf_info[regs[reg[i]]]
         if(let_val > 2**31):
             let_val = -(let_val^0xffffffff) - 1
-        if(val != let_val):
-            print("Test failed: expected", val, "got", let_val)
+        if expected[i] != let_val:
+            print("Test failed: expected", expected[i], "got", let_val)
             print("   Command was:", tests[i])
             print("")
             failed = True
@@ -165,6 +159,6 @@ def regTest():
         print(f"Regfile test - All tests ({len(tests)} tests) passed!")
 
 if __name__ == '__main__':
-    print("Autograder for CS154 Lab 3 - Version 0.0.4")
-    # memTest()
+    print("Autograder for CS154 Lab 3 - Version 0.0.5")
+    memTest()
     regTest()

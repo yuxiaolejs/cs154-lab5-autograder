@@ -4,7 +4,6 @@ const child_process = require("child_process")
 let regs = ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"]
 
 function compose(test_suites) {
-    console.log(test_suites)
     let outputSource = "main:\n"
     let expectedDRamVal = []
 
@@ -12,18 +11,22 @@ function compose(test_suites) {
 
     let reg = []
 
+    let inst = []
+
     for (let i = 0; i < test_suites.length; i++) {
         let test = test_suites[i]
         outputSource += test.inst + "\n"
         expectedDRamVal = expectedDRamVal.concat(test.exp)
         tests = tests.concat(test.tests)
         reg = reg.concat(test.reg)
+        inst = inst.concat(test.instCount)
     }
     return {
         source: outputSource,
         expected: expectedDRamVal,
         tests: tests,
-        reg:reg
+        reg: reg,
+        inst: inst
     }
 }
 
@@ -63,24 +66,25 @@ function compile(sourceCode) {
 function rfADDI(num) {
     let instructions = []
     let exp_res = []
-
     let tests = []
-
     let reg = []
+    let inst = []
 
     for (let i = 0; i < num; i++) {
         let t1 = regs[parseInt(Math.random() * regs.length)]
-        let current = parseInt(Math.random() * 100)
-        instructions.push(`addi $${t1}, $zero, current`)
+        let current = parseInt(Math.random() * 100) - 50
+        instructions.push(`addi $${t1}, $zero, ${current}`)
         tests.push(`addi $${t1}, $zero, ${current}`)
         exp_res.push(current)
         reg.push(t1)
+        inst.push(1)
     }
     return {
         tests: tests,
         inst: instructions.join("\n"),
         exp: exp_res,
-        reg: reg
+        reg: reg,
+        instCount: inst
     }
 }
 
@@ -92,6 +96,8 @@ function rfADD(num) {
 
     let reg = []
 
+    let inst = []
+
     for (let i = 0; i < num; i++) {
         let t1 = regs[parseInt(Math.random() * regs.length)]
         let t2 = regs[parseInt(Math.random() * regs.length)]
@@ -100,15 +106,22 @@ function rfADD(num) {
         instructions.push(`addi $${t1}, $zero, ${inp1}`)
         instructions.push(`addi $${t2}, $zero, ${inp2}`)
         instructions.push(`add $${t1}, $${t2}, $${t1}`)
-        tests.push(`add $${t1}, $${t2}, $${t1}`)
-        exp_res.push(inp1 + inp2)
+        tests.push(`add $${t1}, $${t2}(${inp2}), $${t1}(${inp1})`)
+        if (t1 === t2) {
+            exp_res.push(inp2 * 2)
+        }
+        else {
+            exp_res.push(inp1 + inp2)
+        }
         reg.push(t1)
+        inst.push(3)
     }
     return {
         tests: tests,
         inst: instructions.join("\n"),
         exp: exp_res,
-        reg: reg
+        reg: reg,
+        instCount: inst
     }
 }
 
