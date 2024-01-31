@@ -91,11 +91,8 @@ function rfADDI(num) {
 function rfADD(num) {
     let instructions = []
     let exp_res = []
-
     let tests = []
-
     let reg = []
-
     let inst = []
 
     for (let i = 0; i < num; i++) {
@@ -125,9 +122,131 @@ function rfADD(num) {
     }
 }
 
+function rfAND(num) {
+    let instructions = []
+    let exp_res = []
+    let tests = []
+    let reg = []
+    let inst = []
+
+    for (let i = 0; i < num; i++) {
+        let t1 = regs[parseInt(Math.random() * regs.length)]
+        let t2 = regs[parseInt(Math.random() * regs.length)]
+        let inp1 = parseInt(Math.random() * 100) - 50
+        let inp2 = parseInt(Math.random() * 100) - 50
+        instructions.push(`addi $${t1}, $zero, ${inp1}`)
+        instructions.push(`addi $${t2}, $zero, ${inp2}`)
+        instructions.push(`and $${t1}, $${t2}, $${t1}`)
+        tests.push(`and $${t1}, $${t2}(${inp2}), $${t1}(${inp1})`)
+        if (t1 === t2)
+            exp_res.push(inp2)
+        else
+            exp_res.push(inp1 & inp2)
+        reg.push(t1)
+        inst.push(3)
+    }
+    return {
+        tests: tests,
+        inst: instructions.join("\n"),
+        exp: exp_res,
+        reg: reg,
+        instCount: inst
+    }
+}
+
+function rfLUI(num) {
+    let instructions = []
+    let exp_res = []
+    let tests = []
+    let reg = []
+    let inst = []
+
+    for (let i = 0; i < num; i++) {
+        let t1 = regs[parseInt(Math.random() * regs.length)]
+        let inp1 = parseInt(Math.random() * 2 ^ 16)
+        let inp2 = parseInt(Math.random() * 100)
+        instructions.push(`lui $${t1}, ${inp2}`)
+        instructions.push(`addi $${t1}, $${t1}, ${inp1}`)
+        tests.push(`lui $${t1}, ${inp2}; addi $${t1}, ${inp1}`)
+        exp_res.push(inp1 + (inp2 << 16))
+        reg.push(t1)
+        inst.push(2)
+    }
+    return {
+        tests: tests,
+        inst: instructions.join("\n"),
+        exp: exp_res,
+        reg: reg,
+        instCount: inst
+    }
+}
+
+function rfORI(num) {
+    let instructions = []
+    let exp_res = []
+    let tests = []
+    let reg = []
+    let inst = []
+
+    for (let i = 0; i < num; i++) {
+        let t1 = regs[parseInt(Math.random() * regs.length)]
+        let inp1 = parseInt(Math.random() * 100) - 50
+        let inp2 = parseInt(Math.random() * 100)
+        instructions.push(`addi $${t1}, $zero, ${inp1}`)
+        instructions.push(`ori $${t1}, $${t1}, ${inp2}`)
+        tests.push(`addi $${t1}, $zero, ${inp1}; ori $${t1}, $${t1}, ${inp2}`)
+        exp_res.push(inp1 | inp2)
+        reg.push(t1)
+        inst.push(2)
+    }
+    return {
+        tests: tests,
+        inst: instructions.join("\n"),
+        exp: exp_res,
+        reg: reg,
+        instCount: inst
+    }
+}
+
+function rfSLT(num) {
+    let instructions = []
+    let exp_res = []
+    let tests = []
+    let reg = []
+    let inst = []
+
+    for (let i = 0; i < num; i++) {
+        let t1 = regs[parseInt(Math.random() * regs.length)]
+        let t2 = regs[parseInt(Math.random() * regs.length)]
+        let inp1 = parseInt(Math.random() * 100) - 50
+        let inp2 = parseInt(Math.random() * 100) - 50
+        instructions.push(`addi $${t1}, $zero, ${inp1}`)
+        instructions.push(`addi $${t2}, $zero, ${inp2}`)
+        instructions.push(`slt $${t1}, $${t1}, $${t2}`)
+        tests.push(`addi $${t1}, $zero, ${inp1}; addi $${t2}, $zero, ${inp2}; slt $${t1}, $${t1}, $${t2}`)
+        if (t1 === t2)
+            exp_res.push(0)
+        else
+            exp_res.push(inp1 < inp2 ? 1 : 0)
+        reg.push(t1)
+        inst.push(3)
+    }
+    return {
+        tests: tests,
+        inst: instructions.join("\n"),
+        exp: exp_res,
+        reg: reg,
+        instCount: inst
+    }
+}
+
 const functionMap = {
     "addi": rfADDI,
-    "add": rfADD
+    "add": rfADD,
+    "and": rfAND,
+    "lui": rfLUI,
+    "ori": rfORI,
+    "slt": rfSLT
 }
 
 module.exports = {

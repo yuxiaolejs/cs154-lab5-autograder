@@ -22,6 +22,10 @@ memTestCases = {
 regTestCases = {
     "addi": 100,
     "add": 100,
+    "and": 100,
+    "lui": 100,
+    "ori": 100,
+    "slt": 100,
 }
 
 regs = {
@@ -146,7 +150,14 @@ def regTest():
             sim.step({})
         rf_info = sim.inspect_mem(ucsbcs154lab3_cpu.rf)
         # print(regs[reg[i]],expected[i],rf_info[regs[reg[i]]])
-        let_val = rf_info[regs[reg[i]]]
+        insp_reg = regs[reg[i]]
+        if insp_reg not in rf_info:
+            print("Test failed: expected", expected[i], "got nothing")
+            print("   Command was:", tests[i])
+            print("")
+            failed = True
+            continue
+        let_val = rf_info[insp_reg]
         if(let_val > 2**31):
             let_val = -(let_val^0xffffffff) - 1
         if expected[i] != let_val:
