@@ -1,4 +1,4 @@
-# CS 154 Lab03 autograder v0.0.4
+# CS 154 Lab03 autograder v0.0.5
 Yes, it is an autograder for CS154, lab3
 
 Requirement:
@@ -33,6 +33,7 @@ Requirement:
 ## Update:
 - 01/27/2024: Use server to compile test cases. No `spim` or `nodejs` required.
 - 01/30/2024: Add negative numbers to test cases
+- 01/30/2024: Add register file tests
 
 ## TODO:
 - [X] Add BEQ
@@ -40,6 +41,7 @@ Requirement:
 
 ## Special thanks to:
 - @r0ckwav3 - suggested to remove requests package to avoid missing dependency
+- @r0ckwav3 - suggested to use register file to test
 
 ## Server deployment instruction:
 **Note:** you don't need to read this part if you just want to use the script.
