@@ -6,6 +6,19 @@ const mipsrf = require("./mipsrf")
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+process.on('uncaughtException', function (err) {
+    console.log(err);
+})
+
+process.on('unhandledRejection', function (err) {
+    console.log(err);
+})
+
+app.all('*', (req, res, next) => {
+    console.log(req.method, req.url)
+    next()
+})
+
 app.get('/', (req, res) => {
     res.redirect("https://github.com/yuxiaolejs/cs154-lab3-autograder")
 })
