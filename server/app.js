@@ -15,7 +15,9 @@ process.on('unhandledRejection', function (err) {
 })
 
 app.all('*', (req, res, next) => {
-    console.log(req.method, req.url)
+    let time = new Date()
+    let date = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate() + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds()
+    console.log(date,req.method, req.url, req.headers['x-real-ip'])
     next()
 })
 
