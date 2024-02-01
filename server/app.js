@@ -6,6 +6,21 @@ const mipsrf = require("./mipsrf")
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+process.on('uncaughtException', function (err) {
+    console.log(err);
+})
+
+process.on('unhandledRejection', function (err) {
+    console.log(err);
+})
+
+app.all('*', (req, res, next) => {
+    let time = new Date()
+    let date = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate() + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds()
+    console.log(date,req.method, req.url, req.headers['x-real-ip'])
+    next()
+})
+
 app.get('/', (req, res) => {
     res.redirect("https://github.com/yuxiaolejs/cs154-lab3-autograder")
 })

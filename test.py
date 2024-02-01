@@ -66,7 +66,7 @@ def getTestCases(path, testcases):
 
 def memTest():
     print("Memory test - Fetching tests from server...")
-    tests = getTestCases("/testcase",memTestCases)
+    tests = getTestCases("/testcase?v=0.0.5",memTestCases)
     if(tests['code']!=200):
         print("Server failed to make tests:\n", tests['message'])
         sys.exit(1)
@@ -117,7 +117,7 @@ def memTest():
         
 def regTest():
     print("Regfile test - Fetching tests from server...")
-    tests = getTestCases("/rf/testcase",regTestCases)
+    tests = getTestCases("/rf/testcase?v=0.0.5",regTestCases)
     if(tests['code']!=200):
         print("Server failed to make tests:\n", tests['message'])
         sys.exit(1)
@@ -158,7 +158,7 @@ def regTest():
             failed = True
             continue
         let_val = rf_info[insp_reg]
-        if(let_val > 2**31):
+        if(let_val >= 2**31):
             let_val = -(let_val^0xffffffff) - 1
         if expected[i] != let_val:
             print("Test failed: expected", expected[i], "got", let_val)
