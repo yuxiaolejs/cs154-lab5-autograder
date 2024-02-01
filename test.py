@@ -158,7 +158,7 @@ def regTest():
             failed = True
             continue
         let_val = rf_info[insp_reg]
-        if(let_val > 2**31):
+        if(let_val >= 2**31):
             let_val = -(let_val^0xffffffff) - 1
         if expected[i] != let_val:
             print("Test failed: expected", expected[i], "got", let_val)
