@@ -66,7 +66,7 @@ def getTestCases(path, testcases):
 
 def memTest():
     print("Memory test - Fetching tests from server...")
-    tests = getTestCases("/testcase",memTestCases)
+    tests = getTestCases("/testcase?v=0.0.5",memTestCases)
     if(tests['code']!=200):
         print("Server failed to make tests:\n", tests['message'])
         sys.exit(1)
@@ -117,7 +117,7 @@ def memTest():
         
 def regTest():
     print("Regfile test - Fetching tests from server...")
-    tests = getTestCases("/rf/testcase",regTestCases)
+    tests = getTestCases("/rf/testcase?v=0.0.5",regTestCases)
     if(tests['code']!=200):
         print("Server failed to make tests:\n", tests['message'])
         sys.exit(1)
