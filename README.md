@@ -1,5 +1,7 @@
 # CS 154 Lab05 autograder v0.0.5
-Yes, it is an autograder for CS154, lab5
+Yes, it is an autograder for CS154, lab5.
+
+Notice: This script does not guarantee a 100% coverage, and it does not guarantee that your code is correct. It is only a tool to help you test your code. Please make sure you understand the test cases and the expected results. This script itself may contain bugs, and it may not be able to test all the edge cases. Please use it with caution.
 
 Requirement:
 - Python
