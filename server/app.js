@@ -22,7 +22,7 @@ app.all('*', (req, res, next) => {
 })
 
 app.get('/', (req, res) => {
-    res.redirect("https://github.com/yuxiaolejs/cs154-lab3-autograder")
+    res.redirect("https://github.com/yuxiaolejs/cs154-lab5-autograder")
 })
 
 app.post('/testcase', (req, res) => {

@@ -1,4 +1,4 @@
-import ucsbcs154lab3_cpu
+import ucsbcs154lab5_forward
 import pyrtl
 import sys
 import json
@@ -6,17 +6,17 @@ import json
 from urllib import request, parse
 
 
-ucsbcs154lab3_cpu.d_mem
+ucsbcs154lab5_forward.d_mem
 
 memTestCases = {
-    "addi": 10,
-    "add": 10,
-    "and": 10,
-    "lui": 10,
-    "ori": 10,
-    "slt": 10,
-    "lw": 10,
-    "beq": 10,
+    "ExMemForwardA": 20,
+    "ExMemForwardBoth": 20,
+    "MemWbForwardA": 20,
+    "MemWbForwardBoth": 20,
+    "BackToBack": 20,
+    "ZeroReg": 20,
+    "LoadWord": 20,
+    "MemBackToBack": 20,
 }
 
 regTestCases = {
@@ -58,7 +58,7 @@ regs = {
 }
 
 def getTestCases(path, testcases):
-    url = 'https://cs154-lab3.proxied.tianleyu.com'+path
+    url = 'http://127.0.0.1:13002'+path
     data = json.dumps(testcases).encode()
     req = request.Request(url, data=data, headers={'content-type': 'application/json'})
     response = request.urlopen(req)
@@ -76,7 +76,7 @@ def memTest():
     
     binary = tests['binary'].split('\n')
     expected = tests['composed']['expected']
-    tests = tests['composed']['tests']
+    cmds = tests['composed']['tests']
     
     
     sim_trace = pyrtl.SimulationTrace()
@@ -88,12 +88,13 @@ def memTest():
             i += 1
 
     sim = pyrtl.Simulation(tracer=sim_trace, memory_value_map={
-        ucsbcs154lab3_cpu.i_mem: i_mem_init
+        ucsbcs154lab5_forward.i_mem: i_mem_init
     })
-    for cycle in range(1000):
+    for cycle in range(tests['composed']['count']):
         sim.step({})
-    dmem_info = sim.inspect_mem(ucsbcs154lab3_cpu.d_mem)
+    dmem_info = sim.inspect_mem(ucsbcs154lab5_forward.d_mem)
     # print(dmem_info)
+    print("Expected cycles:", tests['composed']['count'])
     
     failed = False
     
@@ -108,12 +109,12 @@ def memTest():
             let_val = -(let_val^0xffffffff) - 1
         if(val != let_val):
             print("Test failed: expected", val, "got", let_val)
-            print("   Command was:", tests[i])
+            print("   Command was:", cmds[i])
             print("")
             failed = True
             
     if(not failed):
-        print(f"Memory test - All tests ({len(tests)} tests) passed!")
+        print(f"Memory test - All tests ({len(cmds)} tests) passed!")
         
 def regTest():
     print("Regfile test - Fetching tests from server...")
@@ -141,14 +142,14 @@ def regTest():
             i_mem_init[i] = int(line, 16)
             i += 1
     sim = pyrtl.Simulation(tracer=sim_trace, memory_value_map={
-        ucsbcs154lab3_cpu.i_mem: i_mem_init
+        ucsbcs154lab5_forward.i_mem: i_mem_init
     })
     
     failed = False
     for i, val in enumerate(expected):
         for cycle in range(insts[i]):
             sim.step({})
-        rf_info = sim.inspect_mem(ucsbcs154lab3_cpu.rf)
+        rf_info = sim.inspect_mem(ucsbcs154lab5_forward.rf)
         # print(regs[reg[i]],expected[i],rf_info[regs[reg[i]]])
         insp_reg = regs[reg[i]]
         if insp_reg not in rf_info:
@@ -170,6 +171,5 @@ def regTest():
         print(f"Regfile test - All tests ({len(tests)} tests) passed!")
 
 if __name__ == '__main__':
-    print("Autograder for CS154 Lab 3 - Version 0.0.5")
+    print("Autograder for CS154 Lab 5 - Version 0.0.5")
     memTest()
-    regTest()
