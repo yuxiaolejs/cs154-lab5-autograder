@@ -58,7 +58,7 @@ regs = {
 }
 
 def getTestCases(path, testcases):
-    url = 'http://127.0.0.1:13002'+path
+    url = 'https://cs154-lab5.proxied.tianleyu.com'+path
     data = json.dumps(testcases).encode()
     req = request.Request(url, data=data, headers={'content-type': 'application/json'})
     response = request.urlopen(req)

@@ -12,7 +12,7 @@ This script is based on the lab3 autograder by myself, and the test cases are pr
 **Thanks a lot Peter!**
 
 ## Notice:
-- In order to test your code properly, this script assumes that your `addi` and `sw` are working properly. If you are not sure, please test them first.
+- In order to test your code properly, this script assumes that your `addi` and `sw` are working properly. If you are not sure, please test them first (Your pipeline will be flushed everytime the test instruction tries to write to memory, so no worries!).
 - Please check version number of this script (will be displayed when running). If does not match this document, please update it!
 - This server might not be available all the time. (It's not even a server, it's my desktop plus a FRP NAT proxy...)
 <!-- - If you found any bugs, please feel free to use the issue tracker on github to report it or just post it on piazza under [this post](https://piazza.com/class/lr49arnlyiq1kg/post/45) as a follow up. -->
